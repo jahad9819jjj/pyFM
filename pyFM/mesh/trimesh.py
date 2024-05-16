@@ -461,6 +461,7 @@ class TriMesh:
              (n,k) - Only if return_spectrum is True.
         """
         if self.facelist is None:
+            # robust laplacianを使うフラグ
             robust = True
 
         if robust:
@@ -470,12 +471,15 @@ class TriMesh:
 
         if robust or intrinsic:
             self._intrinsic = intrinsic
+            # 重み行列と面積行列を計算
             if self.facelist is not None:
                 self.W, self.A = robust_laplacian.mesh_laplacian(self.vertlist, self.facelist, mollify_factor=mollify_factor)
             else:
                 self.W, self.A = robust_laplacian.point_cloud_laplacian(self.vertlist, mollify_factor=mollify_factor)
 
         else:
+            # cotangent_weightsから重み行列Wを計算
+            # dia_area_matから面積行列を計算
             self.W = laplacian.cotangent_weights(self.vertlist, self.facelist)
             self.A = laplacian.dia_area_mat(self.vertlist, self.facelist)
 
@@ -484,6 +488,8 @@ class TriMesh:
             if verbose:
                 print(f"Computing {k} eigenvectors")
                 start_time = time.time()
+            # Laplacian行列の固有値と固有ベクトルを計算
+            # 重み行列Wと面積行列Aを用いて一般化固有問題を解く
             self.eigenvalues, self.eigenvectors = laplacian.laplacian_spectrum(self.W, self.A,
                                                                                spectrum_size=k)
 
