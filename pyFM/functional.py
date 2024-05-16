@@ -275,15 +275,12 @@ class FunctionalMapping:
             step with which to subsample the descriptors.
         k_process      : int
             number of eigenvalues to compute for the Laplacian spectrum
-        ・Laplacian スペクトルの計算 (各メッシュの固有値と固有ベクトル)
-        ・記述子（descriptor）の計算（WKSまたはHKS）
-        ・ランドマークが指定されている場合は、ランドマーク記述子の計算と追加
-        ・記述子のサブサンプリングと正規化
         """
         self.k1, self.k2 = n_ev
 
         if k_process is None:
-            k_process = 200
+            # k_process = 200
+            k_process = 35
 
         use_lm = landmarks is not None and len(landmarks) > 0
 

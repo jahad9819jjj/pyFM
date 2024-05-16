@@ -3,16 +3,6 @@ import numpy as np
 
 def HKS(evals, evects, time_list,scaled=False):
     """
-    全ての頂点についてHKSを計算する。
-    $HKS(x, t) = Σ_i exp(-λ_i * t) * φ_i(x)^2$
-    λ_i:i番目の固有値, φ_i(x):頂点xにおけるi番目の固有ベクトルの値, t:時間値
-    scaled=Trueの場合、各時間値についてHKSの値を正規化する。
-    これにより、異なる時間スケールでのHKSの比較が可能となる。
-    異なる時間スケールでHKSの比較をすることで以下の利点を得る。
-    1. マルチスケール特徴の抽出:長い時間スケールのHKSでは帯域的な形状の特徴を, 短い時間スケールのHKSでは局所的な形状の詳細を
-    2. ロバスト性の向上：単一時間スケールの場合はノイズや形状の微小な変化の影響を受けやすい.
-    3. 識別力の高い特徴記述子の獲得
-    各頂点における各時間値でのHKSの値を含む, (N, num_T)の配列を返す。
     Returns the Heat Kernel Signature for num_T different values.
     The values of the time are interpolated in logscale between the limits
     given in the HKS paper. These limits only depends on the eigenvalues.
@@ -49,10 +39,8 @@ def HKS(evals, evects, time_list,scaled=False):
 
 def lm_HKS(evals, evects, landmarks, time_list, scaled=False):
     """
-    ランドマークにて指定された頂点のみについてHKSを計算する
-    各ランドマークにおける各時間値でのHKSの値を含む, (N, num_T)の配列を返す。
-
     Returns the Heat Kernel Signature for some landmarks and time values.
+
 
     Parameters
     ------------------------
@@ -88,8 +76,6 @@ def lm_HKS(evals, evects, landmarks, time_list, scaled=False):
 
 def auto_HKS(evals, evects, num_T, landmarks=None, scaled=True):
     """
-    auto_HKSを用いて, 時間値のリストを生成する。この関数は固有値の最小値と最大値に基づいて対数スケールで時間値を選択する。
-
     Compute HKS with an automatic choice of tile values
 
     Parameters
@@ -120,10 +106,6 @@ def auto_HKS(evals, evects, num_T, landmarks=None, scaled=True):
 
 def mesh_HKS(mesh, num_T, landmarks=None, k=None):
     """
-    メッシュ上の各頂点における熱拡散仮定の時間変化を表現（AKAZEっぽい？）
-    1. Laplace-Beltrami演算を用いて固有値と固有ベクトルを計算(mesh.eigenvalues, mesh.eigenvectors)
-    2. auto_HKS(内部で時間値を自動で計算してHKS, lm_HKSを計算)
-    3. 記述子を得る
     Compute the Heat Kernel Signature for a mesh
 
     Parameters

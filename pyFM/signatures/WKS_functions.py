@@ -3,16 +3,6 @@ import numpy as np
 
 def WKS(evals, evects, energy_list, sigma, scaled=False):
     """
-    全ての頂点についてWKSを計算する。
-    WKS(x, e) = Σ_i exp(-((log(e) - log(λ_i))^2) / (2σ^2)) * φ_i(x)^2 
-    λ_i:i番目の固有値, φ_i(x):頂点xにおけるi番目の固有ベクトルの値, e:エネルギー値, σ:標準偏差
-    scaled=Trueの場合、各エネルギースケールでのWKSの値を正規化する。
-    これにより、異なる時間スケールでのWKSの比較が可能となる。
-    異なる時間スケールでWKSの比較をすることで以下の利点を得る。
-    1. マルチスケール特徴の抽出:長い時間スケールのHKSでは帯域的な形状の特徴を, 短い時間スケールのHKSでは局所的な形状の詳細を
-    2. ロバスト性の向上：単一時間スケールの場合はノイズや形状の微小な変化の影響を受けやすい.
-    3. 識別力の高い特徴記述子の獲得
-    各頂点における各時間値でのHKSの値を含む, (N, num_T)の配列を返す。
     Returns the Wave Kernel Signature for some energy values.
 
     Parameters
@@ -55,7 +45,6 @@ def WKS(evals, evects, energy_list, sigma, scaled=False):
 
 def lm_WKS(evals, evects, landmarks, energy_list, sigma, scaled=False):
     """
-    各ランドマークにおける各エネルギー値でのWKSの値を含む, (N, num_T)の配列を返す。
     Returns the Wave Kernel Signature for some landmarks and energy values.
 
 
@@ -99,8 +88,6 @@ def lm_WKS(evals, evects, landmarks, energy_list, sigma, scaled=False):
 
 def auto_WKS(evals, evects, num_E, landmarks=None, scaled=True):
     """
-    auto_KSを用いて, エネルギー値のリストを生成する。この関数は固有値の最小値と最大値に基づいて対数スケールで等間隔に選択する。
-
     Compute WKS with an automatic choice of scale and energy
 
     Parameters
@@ -137,10 +124,6 @@ def auto_WKS(evals, evects, num_E, landmarks=None, scaled=True):
 
 def mesh_WKS(mesh, num_E, landmarks=None, k=None):
     """
-    メッシュ上の各頂点における熱拡散仮定の時間変化を表現（AKAZEっぽい？）
-    1. Laplace-Beltrami演算を用いて固有値と固有ベクトルを計算(mesh.eigenvalues, mesh.eigenvectors)
-    2. auto_WKS(内部でエネルギー値のリストと対応する標準偏差を自動で計算してWKS, lm_WKSを計算)
-    3. 記述子を得る
     Compute the Wave Kernel Signature for a mesh
 
     Parameters
